@@ -32,3 +32,21 @@ jobs:
       - run: docker push tranquilonjoedock/multi-nginx
       - run: docker push tranquilonjoedock/multi-server
       - run: docker push tranquilonjoedock/multi-worker
+
+      # Create the Zip File for AWS
+      - name: Generate deployment package
+        run: zip deploy.zip docker-compose.yml
+
+      # Deploy Phase
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_KEY }}
+          application_name: Multi-Docker
+          environment_name: Multi-Docker-env
+          existing_bucket_name: elasticbeanstalk-us-west-2-955317918936
+          region: us-west-2
+          version_label: ${{ github.sha }}
+          deployment_package: deploy.zip
+          use_existing_version_if_available: "true"
