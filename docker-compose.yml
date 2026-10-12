@@ -3,9 +3,9 @@ services:
     image: postgres:15-alpine
     container_name: complex-postgres
     environment:
-      POSTGRES_USER: user_admin
-      POSTGRES_PASSWORD: user_password
-      POSTGRES_DB: user_db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5433:5432"
     volumes:
@@ -39,10 +39,10 @@ services:
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
-      - PGUSER=user_admin
+      - PGUSER=${POSTGRES_USER}
       - PGHOST=postgres
-      - PGDATABASE=user_db
-      - PGPASSWORD=user_password
+      - PGDATABASE=${POSTGRES_DB}
+      - PGPASSWORD=${POSTGRES_PASSWORD}
       - PGPORT=5432
 
   worker:
